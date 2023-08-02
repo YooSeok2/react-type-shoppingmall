@@ -5,7 +5,17 @@ export const getClient = () => {
     let client : QueryClient | null = null;
     return (() => {
         if (!client) {
-            client = new QueryClient({});
+            client = new QueryClient({
+              defaultOptions:{
+                queries: {
+                  staleTime: 1000 * 60,
+                  cacheTime: 1000 * 60 * 60 * 24,
+                  refetchOnWindowFocus: false,
+                  refetchOnMount: false,
+                  refetchOnReconnect: false,
+                }
+              }
+            });
         }
         return client;
     })()

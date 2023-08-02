@@ -6,7 +6,7 @@ type QueryLayoutProps = {
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   path: string;
   qkey: string[],
-  callback: (data: []) => ReactElement;
+  callback: (data: [] | any) => ReactElement;
 }
 
 export default function QueryLayout({ 

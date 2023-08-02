@@ -6,8 +6,9 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {getClient} from '@/api/queryClient';
 
+const client = getClient();
+
 export default function App({ Component, pageProps }: AppProps) {
-  const client = getClient();
   return (
     <QueryClientProvider client={client}>
       <Component {...pageProps} />
