@@ -3,7 +3,7 @@ import QueryLayout from "@/components/QueryLayout";
 import {QueryKeys} from '@/api/queryClient';
 import { Products } from "@/types";
 import CustomImage from '@/components/Image'
-import {ProductItem}  from "@/components/ProductItem";
+import {ProductItem}  from "@/components/product/ProductItem";
 
 export default function ProductDetail() {
   const router = useRouter();

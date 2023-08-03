@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import './products.scss';
+@import './variable.scss';
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -18,3 +19,52 @@
 }
 
 body {}
+.main{
+  margin-top: 120px;
+  &__title{
+      @include font(30px, 800);
+      margin-left: 6rem;
+  }
+}
+
+.header{
+  position: fixed;
+  @include position(0,0,'',0);
+  width: 100%;
+  z-index: 2000;
+  border: 0;
+  background: $bg1;
+
+  .header-wrap{
+      width: 70vw;
+      height: 55px;
+      margin: 0 auto;
+      @include flex(row, space-between,center);
+      .header-menu{
+          @include flex(row, space-between, center);
+          @include font(18px, 600);
+          width: 350px;
+          & li {
+              cursor: pointer;
+              padding: 8px 10px;
+              border-radius: 10px;
+          }
+      
+          & li:hover{
+              background-color: var(--greyOpacity100);
+          }
+      }
+      
+      .logo{
+          @include font(30px, 800);
+          width: 170px;
+          cursor: pointer;
+          .logo-img{
+              img{
+                  width: 100%
+              }
+          }
+      }
+  }
+}
+
