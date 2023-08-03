@@ -18,7 +18,13 @@ export default function ProductDetail() {
             callback = {(product: Products) => {
               return (
                 <ProductItem {...product} key={product.id}> 
-                  <CustomImage src={product.image} alt={product.title} width='100%' height='100%' />
+                  <CustomImage 
+                    fill={true} 
+                    src={product.image} 
+                    alt={product.title} 
+                    propHeight={'600px'} 
+                    loading='eager'
+                  />
                 </ProductItem>
               )
             }}

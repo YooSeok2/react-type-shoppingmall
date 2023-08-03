@@ -1,20 +1,60 @@
+import Image, {ImageProps} from 'next/image';
 import styled from '@emotion/styled';
 
-type ImageBoxProps = {
-  width: string,
-  height: string
+type ImageLoaderProps = {
+  src: string,
+  width: number,
+  quality: number
 }
 
-const ImageBox = styled.img<ImageBoxProps>`
-  width: ${props => props.width};
-  height: ${props=> props.height};
-  object-fit: contain;
+const onImageError = (error: unknown) => console.error(error);
+const imageLoader = ({
+  src, 
+  width, 
+  quality,
+} : 
+  ImageLoaderProps) => {
+    return `${src}?w=${width}&q=${quality || 75}`
+}
+
+type ImageBoxProps = {
+  propHeight: string | null
+}
+
+const ImageBox = styled.div`
+  position: relative;
+  width: 100%;
   margin: 15px 0;
+  height: ${(props: ImageBoxProps) => props.propHeight};
 `;
 
-const CustomImage = ({src, alt, width, height}: {src:string, alt:string, width: string, height:string}) => {
+const CustomImage = ({
+  fill = false, 
+  src, 
+  alt,
+  width,
+  height,
+  propHeight, 
+  ...props} :
+  ImageProps & { propHeight?: string } ) => {
   return (
-    <ImageBox width={width} height={height} alt={alt} src={src} />
+    <ImageBox propHeight={propHeight}>
+      <Image
+        css={{
+          height: '100%',
+          objectFit: 'contain',
+          objectPosition: 'center',
+        }}
+        width={width}
+        height={height}
+        fill={fill}
+        alt={alt || 'image'}
+        src={src}
+        {...props}
+        onError={onImageError}
+        loader={imageLoader}
+      />
+    </ImageBox>
   )
 }
 

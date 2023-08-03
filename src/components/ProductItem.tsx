@@ -4,9 +4,12 @@ import Link from 'next/link';
 import { Children, ReactElement } from 'react';
 
 const Item = styled.div`
+  width: 100%;
   border: 1px solid #000;
   padding: 10px;
   & a{
+    position: relative;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
