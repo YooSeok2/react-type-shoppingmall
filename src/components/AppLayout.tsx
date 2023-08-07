@@ -1,4 +1,4 @@
-import Gnb from "./gnb";
+import Gnb from "./Gnb";
 const AppLayout = ({ title, children }: { title?:string ,children: React.ReactNode }) => {
   return (
     <div>

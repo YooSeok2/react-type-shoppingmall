@@ -51,7 +51,7 @@ body {}
           }
       
           & li:hover{
-              background-color: var(--greyOpacity100);
+              background-color: $greyOpacity;
           }
       }
       
