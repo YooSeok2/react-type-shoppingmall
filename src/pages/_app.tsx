@@ -5,8 +5,12 @@ import {
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {getClient} from '@/api/queryClient';
+import {worker} from '@/mocks/browser';
 
 const client = getClient();
+if(process.env.NODE_ENV === 'development') {
+  worker.listen();
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

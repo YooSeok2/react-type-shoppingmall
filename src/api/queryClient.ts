@@ -1,4 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
+import axios, { AxiosRequestConfig } from "axios";
+import {RequestDocument, request} from 'graphql-request';
+
 type AnyObj = {[key: string]: any};
 
 export const getClient = () => {
@@ -21,8 +24,9 @@ export const getClient = () => {
     })()
 };
 
-const BASE_URL = 'https://fakestoreapi.com';
-export const fetcher = async ({
+const AXIOS_BASE_URL = 'https://fakestoreapi.com';
+const GRAPHQL_BASE_URL = '/';
+export const restFetcher = async ({
   method,
   path,
   body,
@@ -34,22 +38,23 @@ export const fetcher = async ({
   params?: AnyObj
 }) => {
   try {
-    const url = `${BASE_URL}${path}`;
-    const fetchOptions: RequestInit = {
+    const url = `${AXIOS_BASE_URL}${path}`;
+    const fetchOptions: AxiosRequestConfig = {
       method,
       headers:{
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': BASE_URL
+        'Access-Control-Allow-Origin': AXIOS_BASE_URL
       }
     }
-    const res = await fetch(url, fetchOptions);
-    // if(!res.ok) throw new Error('Network response was not ok');
-    const json = await res.json();
+    const res = await axios(url, fetchOptions);
+    const json = await res.data;
     return json;
   } catch(err){
-    console.log(err);
+    console.error(err);
   }
 }
+
+export const graphqlFetcher = (query: RequestDocument, variables?: {}) => request(GRAPHQL_BASE_URL, query, variables);
 
 export const QueryKeys = {
   PRODUCTS: 'PRODUCTS',

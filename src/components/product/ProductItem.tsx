@@ -1,4 +1,4 @@
-import {Products} from '@/types';
+import {PRODUCTS} from '@/graphql/products'
 import styled from '@emotion/styled'
 import Link from 'next/link';
 import { Children, ReactElement } from 'react';
@@ -18,25 +18,21 @@ const Item = styled.div`
 `
 
 export function ProductItem ({
-  category,
   id,
-  description,
-  image,
+  imageUrl,
   price,
-  rating,
+  description,
   title,
   children
-}: Products & {children?: ReactElement}){
-  const child = Children.only(children);
+}: PRODUCTS & {children?: ReactElement}){
+  const ImageChild = Children.only(children);
   return (
     <Item>
       <Link href={`/products/${id}`}>
         <h3 className='title'>{title}</h3>
-        <p className='category'>{category}</p>
+        {ImageChild}
         <p className='description'>{description}</p>
-        {child}
         <p className='price'>{price}</p>
-        <p className='rate'>{rating.rate}</p>
       </Link>
     </Item>
   )
