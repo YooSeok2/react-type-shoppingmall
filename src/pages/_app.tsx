@@ -6,6 +6,7 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {getClient} from '@/api/queryClient';
 import {worker} from '@/mocks/browser';
+import { RecoilRoot } from 'recoil';
 
 const client = getClient();
 if(process.env.NODE_ENV === 'development') {
@@ -15,7 +16,9 @@ if(process.env.NODE_ENV === 'development') {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={client}>
-      <Component {...pageProps} />
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
