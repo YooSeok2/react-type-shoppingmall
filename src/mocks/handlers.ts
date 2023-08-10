@@ -1,6 +1,7 @@
 import {graphql} from 'msw';
 import {v4 as uuidv4} from 'uuid';
 import { GET_PRODUCTS, GET_PRODUCT } from '@/graphql/products';
+import {GET_CART, ADD_CART} from '@/graphql/cart';
 
 
 const mock_products = Array.from({length: 20}).map((_,i) => ({
@@ -21,6 +22,12 @@ export const handlers = [
     )
   }),
   graphql.query(GET_PRODUCT, (req, res, ctx) => {
+    return res(ctx.data(mock_products.filter((p) => p.id === req.variables.graphqlId)[0]))
+  }),
+  graphql.query(GET_CART, (req, res, ctx) => {
+    return res();
+  }),
+  graphql.mutation(ADD_CART, (req, res, ctx) => {
     return res(ctx.data(mock_products.filter((p) => p.id === req.variables.graphqlId)[0]))
   })
 ];

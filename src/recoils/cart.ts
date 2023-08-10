@@ -18,7 +18,6 @@ export const cartItemSelector = selectorFamily<number | undefined, string>({
     const newCarts = new Map(carts);
     if(newCarts.has(id)) newCarts.set(id, carts.get(id)+newValue);
     else newCarts.set(id, newValue)    
-    console.log(newCarts)
     set(cartState, newCarts);
   }
 })

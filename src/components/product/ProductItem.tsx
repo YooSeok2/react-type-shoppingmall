@@ -1,4 +1,4 @@
-import {PRODUCTS} from '@/graphql/products'
+import {Products} from '@/graphql/products'
 import styled from '@emotion/styled'
 import Link from 'next/link';
 import { Children, ReactElement } from 'react';
@@ -35,7 +35,7 @@ export function ProductItem ({
   description,
   title,
   children
-}: PRODUCTS & {children?: ReactElement}){
+}: Products & {children?: ReactElement}){
   const ImageChild = Children.only(children);
   const [cartAmount, setCartAmount] = useRecoilState(cartItemSelector(id));
   const addToCart = () =>  setCartAmount(1);

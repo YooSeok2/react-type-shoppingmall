@@ -3,7 +3,7 @@ import QueryLayout from "@/components/QueryLayout";
 import {QueryKeys} from '@/api/queryClient';
 import CustomImage from '@/components/Image'
 import {ProductItem}  from "@/components/product/ProductItem";
-import { GET_PRODUCT, PRODUCTS } from "@/graphql/products";
+import { GET_PRODUCT, Products } from "@/graphql/products";
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function ProductDetail() {
             qkey = {[QueryKeys.PRODUCTS, id as string]}
             graphqlQuery={GET_PRODUCT}
             graphqlId={id as string}
-            callback = {(product: PRODUCTS) => {
+            callback = {(product: Products) => {
               console.log(product)
               return (
                 <ProductItem {...product} key={product.id}> 
