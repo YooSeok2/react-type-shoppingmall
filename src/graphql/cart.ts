@@ -1,30 +1,41 @@
 import {gql} from 'graphql-tag';
+import { ProductType } from './products';
 
 export type CartType = {
   id:string,
-  imageUrl:string,
-  price:number,
-  title:string,
-  amount:number
+  amount:number,
+  product: ProductType
 }
 
-export const GET_CART = gql`
-  query GetCart {
+export const GET_CARTS = gql`
+  query GetCarts {
     id
-    imageUrl
-    price
-    title
     amount
+    product {
+      id
+      imageUrl
+      price
+      title
+      description
+      createdAt
+    }
   }
 `
 
 export const ADD_CART = gql`
-  mutation AddCart($id: string) {
+mutation ADD_CART($id: ID!) {
+  addCart(productId: $id) {
     id
-    imageUrl
-    price
-    title
     amount
+    product {
+      id
+      imageUrl
+      price
+      title
+      description
+      createdAt
+    }
   }
+}
 `
 

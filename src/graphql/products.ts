@@ -1,6 +1,6 @@
 import { gql } from 'graphql-tag';
 
-export type Products = {
+export type ProductType = {
   id:string,
   imageUrl:string,
   price:number,

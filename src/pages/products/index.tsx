@@ -1,6 +1,6 @@
 import {QueryKeys} from '@/api/queryClient';
 import {ProductItem}  from "@/components/product/ProductItem";
-import { Products } from "@/graphql/products";
+import { ProductType } from "@/graphql/products";
 import QueryLayout from "@/components/QueryLayout";
 import CustomImage from '@/components/Image'
 import AppLayout from '@/components/AppLayout';
@@ -17,7 +17,7 @@ export default function Products() {
               qkey = {[QueryKeys.PRODUCTS]}
               graphqlQuery={GET_PRODUCTS}
               callback = {(data: any) => {
-                return data.products.map((product:Products) => 
+                return data.products.map((product:ProductType) => 
                   <ProductItem {...product} key={product.id}> 
                     <CustomImage  
                       width={200}

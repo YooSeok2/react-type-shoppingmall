@@ -1,9 +1,12 @@
-import {Products} from '@/graphql/products'
+import {ProductType} from '@/graphql/products'
 import styled from '@emotion/styled'
 import Link from 'next/link';
 import { Children, ReactElement } from 'react';
 import {useRecoilState} from 'recoil';
 import { cartItemSelector } from '@/recoils/cart';
+import { useMutation } from '@tanstack/react-query';
+import { QueryKeys, graphqlFetcher } from '@/api/queryClient';
+import { ADD_CART } from '@/graphql/cart';
 
 const Item = styled.div`
   width: 100%;
@@ -35,11 +38,9 @@ export function ProductItem ({
   description,
   title,
   children
-}: Products & {children?: ReactElement}){
+}: ProductType & {children?: ReactElement}){
   const ImageChild = Children.only(children);
-  const [cartAmount, setCartAmount] = useRecoilState(cartItemSelector(id));
-  const addToCart = () =>  setCartAmount(1);
-
+  const {mutate: addCart} = useMutation((id:string) => graphqlFetcher(ADD_CART, {id}))
   return (
     <Item>
       <Link href={`/products/${id}`}>
@@ -48,8 +49,7 @@ export function ProductItem ({
         <p className='description'>{description}</p>
         <p className='price'>{price}</p>
       </Link>
-      <button name='button' onClick={()=>addToCart()}>담기</button>
-      <span>{cartAmount || 0}</span>
+      <button name='button' onClick={()=>addCart(id)}>담기</button>
     </Item>
   )
 }
