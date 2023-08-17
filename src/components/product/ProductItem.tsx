@@ -2,10 +2,8 @@ import {ProductType} from '@/graphql/products'
 import styled from '@emotion/styled'
 import Link from 'next/link';
 import { Children, ReactElement } from 'react';
-import {useRecoilState} from 'recoil';
-import { cartItemSelector } from '@/recoils/cart';
 import { useMutation } from '@tanstack/react-query';
-import { QueryKeys, graphqlFetcher } from '@/api/queryClient';
+import { graphqlFetcher } from '@/api/queryClient';
 import { ADD_CART } from '@/graphql/cart';
 
 const Item = styled.div`
