@@ -39,3 +39,20 @@ mutation ADD_CART($id: ID!) {
 }
 `
 
+export const UPDATE_CART = gql`
+mutation UPDATE_CART($id: ID!, $amount: Int!) {
+  updateCart(cartId: $id, amount: $amount) {
+    id
+    amount
+    product {
+      id
+      imageUrl
+      price
+      title
+      description
+      createdAt
+    }
+  }
+}
+`
+

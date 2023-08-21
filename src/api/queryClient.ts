@@ -11,7 +11,7 @@ export const getClient = () => {
             client = new QueryClient({
               defaultOptions:{
                 queries: {
-                  staleTime: 1000 * 60,
+                  staleTime: 1000 * 60 * 5,
                   cacheTime: 1000 * 60 * 60 * 24,
                   refetchOnWindowFocus: false,
                   refetchOnMount: false,

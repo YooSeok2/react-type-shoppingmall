@@ -8,7 +8,8 @@ type QueryLayoutProps = {
   path?: string;
   graphqlQuery?: RequestDocument;
   graphqlId?: string;
-  qkey: string[],
+  graphqlOption?: any;
+  qkey: string[];
   callback: (data: [] | any) => ReactElement;
 }
 
@@ -18,9 +19,10 @@ export default function QueryLayout({
   graphqlQuery,
   graphqlId,
   qkey,
+  graphqlOption,
   callback 
 }: QueryLayoutProps) {
-  const {data, isLoading, isError} = useQuery([...qkey], () => graphqlFetcher(graphqlQuery, {graphqlId}));
+  const {data, isLoading, isError} = useQuery([...qkey], () => graphqlFetcher(graphqlQuery, {graphqlId}), graphqlOption)
   if(isLoading) return <div>Loading...</div>
   if(isError) return <div>Error...</div>
   return callback(data)

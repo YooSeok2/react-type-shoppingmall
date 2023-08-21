@@ -1,7 +1,12 @@
 import {graphql} from 'msw';
 import {v4 as uuidv4} from 'uuid';
 import { GET_PRODUCTS, GET_PRODUCT } from '@/graphql/products';
-import {GET_CARTS, ADD_CART, CartType} from '@/graphql/cart';
+import {
+  GET_CARTS, 
+  ADD_CART,
+  UPDATE_CART, 
+  CartType
+} from '@/graphql/cart';
 
 const mock_products = Array.from({length: 20}).map((_,i) => ({
   id: uuidv4(),
@@ -28,7 +33,6 @@ export const handlers = [
     return res();
   }),
   graphql.query(GET_CARTS, (req, res, ctx) => {
-    console.log(cartData)
     return res(ctx.data({carts: [...Object.values(cartData)]}));
   }),
   graphql.mutation(ADD_CART, (req, res, ctx) => {
@@ -50,6 +54,18 @@ export const handlers = [
       }
     }
     cartData = newData;
+    return res(ctx.data(newData));
+  }),
+  graphql.mutation(UPDATE_CART, (req, res, ctx) => {
+    const newData = JSON.parse(JSON.stringify(cartData));
+    const {id, amount}  = req.variables;
+    if(!newData[id]) throw new Error('cart not found');
+    newData[id] = {
+      ...newData[id],
+      amount: amount
+    }
+    cartData = newData;
+    console.log(cartData[id]);
     return res(ctx.data(newData));
   })
 ];
