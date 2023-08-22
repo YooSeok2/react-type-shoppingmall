@@ -18,7 +18,7 @@ export default function Cart(){
             cacheTime: 1000 * 60 * 5, 
             refetchOnMount: true
           }}
-          callback={(data:any)=><CartList carts={data.carts} />}
+          callback={(data:any)=><CartList carts={data} />}
         />
       </div>
     </AppLayout>

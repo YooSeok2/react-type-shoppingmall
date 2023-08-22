@@ -33,7 +33,7 @@ export const handlers = [
     return res();
   }),
   graphql.query(GET_CARTS, (req, res, ctx) => {
-    return res(ctx.data({carts: [...Object.values(cartData)]}));
+    return res(ctx.data([...Object.values(cartData)]));
   }),
   graphql.mutation(ADD_CART, (req, res, ctx) => {
     const newData = JSON.parse(JSON.stringify(cartData));
@@ -65,7 +65,6 @@ export const handlers = [
       amount: amount
     }
     cartData = newData;
-    console.log(cartData[id]);
     return res(ctx.data(newData));
   })
 ];

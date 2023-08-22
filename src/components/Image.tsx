@@ -24,8 +24,11 @@ type ImageBoxProps = {
 const ImageBox = styled.div`
   position: relative;
   width: 100%;
-  margin: 15px 0;
+  margin: 15px auto;
   height: ${(props: ImageBoxProps) => props.propHeight};
+  & img {
+    margin: auto;
+  }
 `;
 
 const CustomImage = ({
