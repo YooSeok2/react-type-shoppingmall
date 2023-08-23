@@ -7,6 +7,11 @@ type GnbTypeProps = {
   isborder: boolean;
 };
 
+const GnbCont = styled.div`
+  border-bottom: 1px solid transparent;
+  ${(props: GnbTypeProps) => props.isborder && css`border-bottom-color:rgba(0, 27, 55, 0.1);` }
+`;
+
 export default function Gnb() {
   const border = useMenuBorder()
 
@@ -26,9 +31,5 @@ export default function Gnb() {
   )
 }
 
-const GnbCont = styled.div`
-  border-bottom: 1px solid transparent;
-  ${(props: GnbTypeProps) => props.isborder && css`border-bottom-color:rgba(0, 27, 55, 0.1);` }
-`;
 
 

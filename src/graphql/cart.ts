@@ -56,3 +56,9 @@ mutation UPDATE_CART($id: ID!, $amount: Int!) {
 }
 `
 
+export const DELETE_CART = gql`
+  mutation DELETE_CART($id: ID!) {
+    id
+  }
+`
+
