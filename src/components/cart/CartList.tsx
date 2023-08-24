@@ -90,7 +90,7 @@ CartList.Item = function Item({
 
   return(
     <ItemBox>
-      <input className="checkbox" type="checkbox" name={`select-item_${id}`} />
+      <input className="checkbox" type="checkbox" name="select-item" />
       <h3>{product.title}</h3>
       {ImageChild}
       <p>{product.description}</p>
