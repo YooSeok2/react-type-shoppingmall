@@ -5,9 +5,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SyntheticEvent, Children, ReactElement } from "react";
 import CustomImage from '@/components/Image'
 
-export function CartList({ carts = {} }: { carts: {[key:string]:CartType} }) {
-    const cartsArray = Object.values(carts);
-    return cartsArray.map((cart: CartType) => ( 
+export function CartList({ carts }: { carts: CartType[] }) {
+    return carts.map((cart: CartType) => ( 
     <CartList.Item {...cart} key={cart.id}>
       <CustomImage
         width={200}
@@ -90,7 +89,7 @@ CartList.Item = function Item({
 
   return(
     <ItemBox>
-      <input className="checkbox" type="checkbox" name="select-item" />
+      <input className="checkbox" type="checkbox" name="select-item" data-id={`${id}`}/>
       <h3>{product.title}</h3>
       {ImageChild}
       <p>{product.description}</p>

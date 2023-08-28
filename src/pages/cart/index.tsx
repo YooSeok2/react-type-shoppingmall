@@ -3,10 +3,17 @@ import AppLayout from '@/components/AppLayout';
 import { CartType, GET_CARTS } from '@/graphql/cart';
 import QueryLayout from '@/components/QueryLayout'; 
 import { CartList } from '@/components/cart/CartList';
-import { SyntheticEvent, useRef } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { checkedCartState } from '@/recoils/cart';
+import { useQueryClient } from '@tanstack/react-query';
+import { WillPay } from '@/components/cart/WillPay';
 
 export default function Cart(){
   const formRef = useRef<HTMLFormElement>(null);
+  const queryClient = useQueryClient();
+  const setCeckedCartItems = useSetRecoilState(checkedCartState);
+  const [formData, setFormData] = useState<FormData>()
 
   const handleCheckBoxChanged = (e:SyntheticEvent) => {
     if(!formRef.current) return;
@@ -24,7 +31,21 @@ export default function Cart(){
       const allCheckInput = formRef.current.querySelector<HTMLInputElement>('input[name="all-check"]');
       if(allCheckInput) allCheckInput.checked = allCheck;
     }
+    setFormData(data);
   }
+
+  useEffect(()=>{
+    const checkBoxes = formRef.current.querySelectorAll<HTMLInputElement>('.checkbox');
+    const checkedIds = [];
+    checkBoxes.forEach((inputElem:HTMLInputElement) => {
+      if(inputElem.checked) checkedIds.push(inputElem.dataset.id);
+    })
+    const cartItems = queryClient.getQueryData<CartType[]>([QueryKeys.CART]);
+    const checkedCartItems = cartItems.filter((cartItem:CartType) => {
+      return checkedIds.some((id:string) => id === cartItem.id)
+    })
+    setCeckedCartItems(checkedCartItems);
+  }, [formData, queryClient]);
   return (
     <AppLayout title='장바구니 페이지'>
       <form ref={formRef} onChange={handleCheckBoxChanged}>
@@ -40,10 +61,13 @@ export default function Cart(){
               cacheTime: 1000 * 60 * 5, 
               refetchOnMount: true
             }}
-            callback={(data:any)=><CartList carts={data.carts} />}
+            callback={(data:any)=>{
+              return <CartList carts={data} />}
+            }
           />
         </ul>
       </form>
+      <WillPay />
     </AppLayout>
   )
 }
