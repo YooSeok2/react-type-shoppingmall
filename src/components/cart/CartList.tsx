@@ -60,13 +60,14 @@ CartList.Item = function Item({
           amount
         }
       }
-      queryClient.setQueryData([QueryKeys.CART], newCartData);
+      queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
     },
     onSuccess: (newValue:{[key:string]:CartType}) => {
       const newCartData = {
         ...newValue
       }
-      queryClient.setQueryData([QueryKeys.CART], newCartData);
+      console.log([...Object.values(newCartData)])
+      queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
     }
   })
 

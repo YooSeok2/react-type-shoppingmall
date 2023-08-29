@@ -8,44 +8,55 @@ import { useSetRecoilState } from 'recoil';
 import { checkedCartState } from '@/recoils/cart';
 import { useQueryClient } from '@tanstack/react-query';
 import { WillPay } from '@/components/cart/WillPay';
+import { useRefCurrent } from '@/hooks';
 
 export default function Cart(){
-  const formRef = useRef<HTMLFormElement>(null);
+  const [formRef, formRefCurrent] = useRefCurrent<HTMLFormElement>();
   const queryClient = useQueryClient();
   const setCeckedCartItems = useSetRecoilState(checkedCartState);
   const [formData, setFormData] = useState<FormData>()
 
   const handleCheckBoxChanged = (e:SyntheticEvent) => {
-    if(!formRef.current) return;
-    const checkboxes = formRef.current.querySelectorAll<HTMLInputElement>('.checkbox');
-    const targetInput = e.target as HTMLInputElement;
-    const data = new FormData(formRef.current);
+    if(!formRefCurrent) return;
+    const data = new FormData(formRefCurrent);
     const selectedCount = data.getAll('select-item').length;
-    if(targetInput.name === 'all-check'){
+    const targetInput = e.target as HTMLInputElement;
+    const checkboxes = formRefCurrent.querySelectorAll<HTMLInputElement>('.checkbox');
+
+    if(targetInput.name === 'all-check'){ 
+      // 장바구니 아이템 전체 선택
       const allCheck = targetInput.checked;
       checkboxes.forEach(inputElem => {
         inputElem.checked = allCheck;
       })
     } else {
+      // 장바구니 아이템 개별 선택
       const allCheck = selectedCount === checkboxes.length;
-      const allCheckInput = formRef.current.querySelector<HTMLInputElement>('input[name="all-check"]');
+      const allCheckInput = formRefCurrent.querySelector<HTMLInputElement>('input[name="all-check"]');
       if(allCheckInput) allCheckInput.checked = allCheck;
     }
     setFormData(data);
   }
 
-  useEffect(()=>{
-    const checkBoxes = formRef.current.querySelectorAll<HTMLInputElement>('.checkbox');
+  const updateCheckedCartItems = () => {
+    if(!formRefCurrent) return;
+    const checkBoxes = formRefCurrent.querySelectorAll<HTMLInputElement>('.checkbox');
     const checkedIds = [];
     checkBoxes.forEach((inputElem:HTMLInputElement) => {
       if(inputElem.checked) checkedIds.push(inputElem.dataset.id);
     })
-    const cartItems = queryClient.getQueryData<CartType[]>([QueryKeys.CART]);
+    const cartItems = queryClient.getQueryData<CartType[]>([QueryKeys.CART]) || [];
     const checkedCartItems = cartItems.filter((cartItem:CartType) => {
       return checkedIds.some((id:string) => id === cartItem.id)
     })
+    console.log(checkedCartItems)
     setCeckedCartItems(checkedCartItems);
-  }, [formData, queryClient]);
+  }
+
+  useEffect(()=>{
+    updateCheckedCartItems();
+  }, [formData, queryClient,formRefCurrent]);
+
   return (
     <AppLayout title='장바구니 페이지'>
       <form ref={formRef} onChange={handleCheckBoxChanged}>

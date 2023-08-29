@@ -7,17 +7,17 @@ export function WillPay(){
   return (
     <div className="carts-willpay">
       <ul>
-        {checkedCart.map((cart) => <WillPay.Layout datas={cart} key={cart.id} />)}
+        {checkedCart.map((cart) => <WillPay.CartItemBox datas={cart} key={cart.id} />)}
       </ul>
     </div>
   )
 }
 
-
-
-WillPay.Layout = function Layout({datas}: {datas:CartType}){
-  console.log(datas);
+WillPay.CartItemBox = function CartItemBox({datas}: {datas:CartType}){
   return (
+    <>
     <li>hi</li>
+    <span>{datas.amount}</span>
+    </>
   )
 }
