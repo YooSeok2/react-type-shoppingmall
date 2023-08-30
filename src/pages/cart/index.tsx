@@ -4,7 +4,7 @@ import { CartType, GET_CARTS } from '@/graphql/cart';
 import QueryLayout from '@/components/QueryLayout'; 
 import { CartList } from '@/components/cart/CartList';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { checkedCartState } from '@/recoils/cart';
 import { useQueryClient } from '@tanstack/react-query';
 import { WillPay } from '@/components/cart/WillPay';
@@ -13,8 +13,16 @@ import { useRefCurrent } from '@/hooks';
 export default function Cart(){
   const [formRef, formRefCurrent] = useRefCurrent<HTMLFormElement>();
   const queryClient = useQueryClient();
-  const setCeckedCartItems = useSetRecoilState(checkedCartState);
+  const [checkedCartItems, setCeckedCartItems] = useRecoilState(checkedCartState);
   const [formData, setFormData] = useState<FormData>()
+
+  useEffect(()=>{
+    setCheckBoxWhenToStart();
+  },[formRefCurrent]);
+  
+  useEffect(()=>{
+    updateCheckedCartItems();
+  }, [formData,formRefCurrent]);
 
   const handleCheckBoxChanged = (e:SyntheticEvent) => {
     if(!formRefCurrent) return;
@@ -49,13 +57,25 @@ export default function Cart(){
     const checkedCartItems = cartItems.filter((cartItem:CartType) => {
       return checkedIds.some((id:string) => id === cartItem.id)
     })
-    console.log(checkedCartItems)
+    console.log(checkedCartItems);
     setCeckedCartItems(checkedCartItems);
   }
 
-  useEffect(()=>{
-    updateCheckedCartItems();
-  }, [formData, queryClient,formRefCurrent]);
+  const setCheckBoxWhenToStart = () => {
+    if(!formRefCurrent) return;
+    const checkboxes = formRefCurrent.querySelectorAll<HTMLInputElement>('.checkbox');
+    const allCheckInput = formRefCurrent.querySelector<HTMLInputElement>('input[name="all-check"]');
+    let checkCount = 0;
+    checkedCartItems.forEach((cartItem:CartType) => {
+      checkboxes.forEach((inputElem:HTMLInputElement) => {
+        if(inputElem.dataset.id === cartItem.id) {
+          inputElem.checked = true;
+          checkCount++;
+        }
+      })
+      if(checkCount === checkboxes.length) allCheckInput.checked = true;
+    });
+  }
 
   return (
     <AppLayout title='장바구니 페이지'>

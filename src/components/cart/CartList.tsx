@@ -4,6 +4,8 @@ import styled from '@emotion/styled'
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SyntheticEvent, Children, ReactElement } from "react";
 import CustomImage from '@/components/Image'
+import { useRecoilState } from "recoil";
+import { checkedCartState } from '@/recoils/cart';
 
 export function CartList({ carts }: { carts: CartType[] }) {
     return carts.map((cart: CartType) => ( 
@@ -47,6 +49,8 @@ CartList.Item = function Item({
 }: CartType & {children?: ReactElement}){
   const ImageChild = Children.only(children);
   const queryClient = useQueryClient();
+  const [checkedCart, setCheckedCart] = useRecoilState(checkedCartState);
+
   const {mutate: updateCart} = useMutation(({id, amount} : {id:string, amount:number}) => graphqlFetcher(UPDATE_CART, {id, amount}), 
   {
     onMutate: async ({id, amount}) => {
@@ -66,7 +70,6 @@ CartList.Item = function Item({
       const newCartData = {
         ...newValue
       }
-      console.log([...Object.values(newCartData)])
       queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
     }
   })
@@ -79,12 +82,20 @@ CartList.Item = function Item({
 
   const handleDeleteCart = (e:SyntheticEvent) => {
     e.preventDefault();
+    const newCartItems = checkedCart.filter((cartItem:CartType) => cartItem.id !== id);
+    setCheckedCart(newCartItems);
     deleteCart({ id });
   }
 
   const handleUpdateAmount = (e: SyntheticEvent) => {
     const changeAmount = Number((e.target as HTMLInputElement).value);
     if(changeAmount < 1) return;
+    const newCartItems = checkedCart.map((cartItem:CartType) => {
+        if(cartItem.id === id) return {...cartItem, amount: changeAmount}
+        return cartItem;
+    });
+    setCheckedCart(newCartItems);
+    console.log(newCartItems)
     updateCart({id, amount: changeAmount});
   }
 

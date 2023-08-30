@@ -8,17 +8,31 @@ export const checkedCartState = atom<CartType[]>({
   default: []
 })
 
-// export const cartItemSelector = selectorFamily<number | undefined, string>({
+// export const CartItemSelector = selectorFamily<void | number, string>({
 //   key: 'cartItem',
-//   get: (id: string) => ({get}) => {
-//     const carts = get(cartState);
-//     return carts.get(id) || 0;
-//   },
+//   get: (id: string) => ({get}) => {},
 //   set: (id: string) => ({get, set}, newValue:number) => {
-//     const carts = get(cartState);
-//     const newCarts = [...carts];
-//     if(newCarts.has(id)) newCarts.set(id, carts.get(id)+newValue);
-//     else newCarts.set(id, newValue)    
-//     set(cartState, newCarts);
+//     const cartState = get(checkedCartState);
+//     const newCartState = cartState.map((item) => {
+//       if(item.id === id) {
+//         return {
+//           ...item,
+//           amount: newValue
+//         }
+//       }
+//       return item;
+//     })
+//     console.log(newCartState)
+//     set(checkedCartState, newCartState);
+//   }
+// })
+
+// export const CartDeleteSelector = selectorFamily<void, string>({
+//   key: 'cartDelete',
+//   get: (id: string) => ({get}) => {},
+//   set: (id: string) => ({get, set}) => {
+//     const cartState = get(checkedCartState);
+//     const newCartState = cartState.filter((item) => item.id !== id);
+//     set(checkedCartState, newCartState);
 //   }
 // })
