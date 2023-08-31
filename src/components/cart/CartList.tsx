@@ -65,12 +65,14 @@ CartList.Item = function Item({
         }
       }
       queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
+      return amount
     },
-    onSuccess: (newValue:{[key:string]:CartType}) => {
+    onSuccess: (newValue:{[key:string]:CartType}, context) => {
       const newCartData = {
         ...newValue
       }
       queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
+      changeCheckedCartQueryItem(context.amount);
     }
   })
 
@@ -87,15 +89,17 @@ CartList.Item = function Item({
     deleteCart({ id });
   }
 
+  const changeCheckedCartQueryItem = (chageAmount: number) => {
+    const newCartItems = checkedCart.map((cartItem:CartType) => {
+      if(cartItem.id === id) return {...cartItem, amount: chageAmount}
+      return cartItem;
+    });
+    setCheckedCart(newCartItems);
+  }
+
   const handleUpdateAmount = (e: SyntheticEvent) => {
     const changeAmount = Number((e.target as HTMLInputElement).value);
     if(changeAmount < 1) return;
-    const newCartItems = checkedCart.map((cartItem:CartType) => {
-        if(cartItem.id === id) return {...cartItem, amount: changeAmount}
-        return cartItem;
-    });
-    setCheckedCart(newCartItems);
-    console.log(newCartItems)
     updateCart({id, amount: changeAmount});
   }
 

@@ -57,7 +57,6 @@ export default function Cart(){
     const checkedCartItems = cartItems.filter((cartItem:CartType) => {
       return checkedIds.some((id:string) => id === cartItem.id)
     })
-    console.log(checkedCartItems);
     setCeckedCartItems(checkedCartItems);
   }
 

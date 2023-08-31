@@ -4,7 +4,6 @@ import { useRecoilState } from "recoil";
 
 export function WillPay(){
   const [checkedCart, setCheckedCart] = useRecoilState(checkedCartState);
-  console.log(checkedCart);
   return (
     <div className="carts-willpay">
       <ul>
