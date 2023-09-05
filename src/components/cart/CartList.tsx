@@ -6,6 +6,7 @@ import { SyntheticEvent, Children, ReactElement } from "react";
 import CustomImage from '@/components/Image'
 import { useRecoilState } from "recoil";
 import { checkedCartState } from '@/recoils/cart';
+import { commas } from "@/util";
 
 export function CartList({ carts }: { carts: CartType[] }) {
     return carts.map((cart: CartType) => ( 
@@ -27,6 +28,7 @@ const ItemBox = styled.li`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 5px;
   & .amount{
     border: 1px solid #888;
   }
@@ -102,14 +104,14 @@ CartList.Item = function Item({
     if(changeAmount < 1) return;
     updateCart({id, amount: changeAmount});
   }
-
+  
   return(
     <ItemBox>
       <input className="checkbox" type="checkbox" name="select-item" data-id={`${id}`}/>
       <h3>{product.title}</h3>
       {ImageChild}
       <p>{product.description}</p>
-      <span>{product.price}원</span>
+      <span>{commas(product.price)}원</span>
       <input 
          type="number"
          className="amount" 

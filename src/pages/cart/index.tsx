@@ -7,14 +7,16 @@ import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { checkedCartState } from '@/recoils/cart';
 import { useQueryClient } from '@tanstack/react-query';
-import { WillPay } from '@/components/cart/WillPay';
+import { WillPay } from '@/components/willpay';
 import { useRefCurrent } from '@/hooks';
+import { useRouter } from 'next/router';
 
 export default function Cart(){
   const [formRef, formRefCurrent] = useRefCurrent<HTMLFormElement>();
   const queryClient = useQueryClient();
   const [checkedCartItems, setCeckedCartItems] = useRecoilState(checkedCartState);
   const [formData, setFormData] = useState<FormData>()
+  const router = useRouter();
 
   useEffect(()=>{
     setCheckBoxWhenToStart();
@@ -97,7 +99,9 @@ export default function Cart(){
           />
         </ul>
       </form>
-      <WillPay />
+      <WillPay>
+        <WillPay.Button onClick={()=>router.push('/payment')}/>
+      </WillPay>
     </AppLayout>
   )
 }

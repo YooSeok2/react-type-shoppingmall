@@ -3,13 +3,18 @@ import { useRecoilState } from "recoil";
 import { Children, ReactElement, useEffect, useState } from "react";
 import CustomImage from '@/components/Image'
 import styled from '@emotion/styled'
-export function WillPay(){
+import { commas } from "@/util";
+
+export function WillPay({children}: {children: ReactElement}) {
   const [totalAmount, setTotalAmount] = useState(0);
   const [checkedCart, setCheckedCart] = useRecoilState(checkedCartState);
+  const buttonChild = Children.only(children);
+  
   useEffect(() => {
     const totalAmount = checkedCart.reduce((acc, cur) => acc + (cur.product.price * cur.amount), 0);
     setTotalAmount(totalAmount);
   }, [checkedCart]);
+  
   return (
     <div className="willpay">
       <ul>
@@ -29,8 +34,8 @@ export function WillPay(){
           </WillPay.CartItemBox>
         ))}
       </ul>
-      <span className="willpay__total">총 가격: {totalAmount}</span>
-      
+      <span className="willpay__total">총 결제 예상 금액: {commas(totalAmount)}원</span>
+      {checkedCart.length> 0 ? buttonChild : null}
     </div>
   )
 }
@@ -43,7 +48,12 @@ const ItemBox = styled.li`
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-`
+  gap: 5px;
+`;
+
+WillPay.Button = function WillPayButton ({onClick} : {onClick: () => void}) {
+  return <button className="willpay__button" onClick={onClick}>결제하기</button>
+}
 
 WillPay.CartItemBox = function CartItemBox({
   amount,
@@ -55,7 +65,7 @@ WillPay.CartItemBox = function CartItemBox({
     <ItemBox>
       {ImageChild} 
       <span>수량: {amount}</span>
-      <span>가격: {price * amount}</span>
+      <span>가격: {commas(price * amount)}</span>
     </ItemBox>
   )
 }
