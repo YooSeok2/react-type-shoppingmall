@@ -1,26 +1,11 @@
 import {useState} from "react"
 import { WillPay } from "../willpay"
 import {PaymentModal} from "../PotalModal"
-import { useRecoilState } from "recoil";
-import { checkedCartState } from "@/recoils/cart";
-import {useRouter} from "next/router";
+import { usePayment } from "@/hooks/usePayment"
 
 export default function PaymentComponent(){
-  const router = useRouter();
-  const [modalShown, setModalShown] = useState<boolean>(false);
-  const [checkedCartData, setCheckedCartData] =  useRecoilState(checkedCartState)
-  const showModal = () => {
-    console.log('showModal')
-    setModalShown(true);
-  }
-  const proceedPayment = () => {
-    setCheckedCartData([]);
-    router.replace("/products")
-  }
-
-  const cancelPayment = () => {
-    setModalShown(false);
-  }
+  const {modalShown, showModal, proceedPayment, cancelPayment} = usePayment();
+  
   return (
     <div className="payment">
       <WillPay>
