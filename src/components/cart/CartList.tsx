@@ -21,7 +21,7 @@ export function CartList({ carts }: { carts: CartType[] }) {
     </CartList.Item>))
 }
 
-const ItemBox = styled.li`
+const CartItemBox = styled.li`
   border: 1px solid #000;
   padding: 15px;
   display: flex;
@@ -78,7 +78,7 @@ CartList.Item = function Item({
     }
   })
 
-  const {mutate:deleteCart} = useMutation(({ id } : {id:string}) => graphqlFetcher(DELETE_CART, {id}), {
+  const {mutate: deleteCart} = useMutation(({ id } : {id:string}) => graphqlFetcher(DELETE_CART, {id}), {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.CART]);
     }
@@ -91,6 +91,12 @@ CartList.Item = function Item({
     deleteCart({ id });
   }
 
+  const handleUpdateAmount = (e: SyntheticEvent) => {
+    const changeAmount = Number((e.target as HTMLInputElement).value);
+    if(changeAmount < 1) return;
+    updateCart({id, amount: changeAmount});
+  }
+
   const changeCheckedCartQueryItem = (chageAmount: number) => {
     const newCartItems = checkedCart.map((cartItem:CartType) => {
       if(cartItem.id === id) return {...cartItem, amount: chageAmount}
@@ -98,15 +104,9 @@ CartList.Item = function Item({
     });
     setCheckedCart(newCartItems);
   }
-
-  const handleUpdateAmount = (e: SyntheticEvent) => {
-    const changeAmount = Number((e.target as HTMLInputElement).value);
-    if(changeAmount < 1) return;
-    updateCart({id, amount: changeAmount});
-  }
   
   return(
-    <ItemBox>
+    <CartItemBox>
       <input className="checkbox" type="checkbox" name="select-item" data-id={`${id}`}/>
       <h3>{product.title}</h3>
       {ImageChild}
@@ -120,6 +120,6 @@ CartList.Item = function Item({
          min={1}
         />
       <button onClick={handleDeleteCart} className="delete-button">삭제</button>
-    </ItemBox>
+    </CartItemBox>
   )
 };

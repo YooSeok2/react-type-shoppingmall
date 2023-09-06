@@ -40,7 +40,7 @@ export function WillPay({children}: {children: ReactElement}) {
   )
 }
 
-const ItemBox = styled.li`
+const WillPayItemBox = styled.li`
   border: 1px solid #000;
   padding: 15px;
   display: flex;
@@ -62,10 +62,10 @@ WillPay.CartItemBox = function CartItemBox({
 }: {amount:number, price:number, children?: ReactElement}){
   const ImageChild = Children.only(children);
   return (
-    <ItemBox>
+    <WillPayItemBox>
       {ImageChild} 
       <span>수량: {amount}</span>
       <span>가격: {commas(price * amount)}</span>
-    </ItemBox>
+    </WillPayItemBox>
   )
 }

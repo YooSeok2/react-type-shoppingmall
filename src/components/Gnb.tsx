@@ -2,6 +2,7 @@ import Link from 'next/link';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { useMenuBorder } from '@/hooks';
+import CustomImage from '@/components/Image';
 
 type GnbTypeProps = {
   isborder: boolean;
@@ -19,7 +20,7 @@ export default function Gnb() {
     <GnbCont isborder={border} className='header'>
       <div className='header-wrap'>
         <div tabIndex={0} role="button">
-            <Link href="/">YooSeok2</Link>
+            <Link href="/"><CustomImage src={'/logo.png'} alt={'로고'} width={150} height={50} /></Link>
         </div>
         <ul className="header-menu">
           <Link href="/"><li>홈</li></Link>

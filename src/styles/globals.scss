@@ -4,6 +4,7 @@
 @import './products.scss';
 @import './variable.scss';
 @import './carts.scss';
+@import './payment.scss';
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -68,4 +69,6 @@ body {}
       }
   }
 }
+
+
 
