@@ -17,17 +17,19 @@ export const PaymentModal = ({show, proceed, cancel}:{
   proceed:()=>void, 
   cancel:()=>void}) => {
   return show && (
-    <PotalModal>
-      <div className='paymentmodal'>
-        <div className="paymentmodal__title">
-          <h1>정말로 결제하시겠습니까?</h1>
+    <div className="modal-wrap">
+      <PotalModal>
+        <div className='paymentmodal'>
+          <div className="paymentmodal__title">
+            <h1>정말로 결제하시겠습니까?</h1>
+          </div>
+          <div className="paymentmodal__btnBox">
+            <button className="paymentmodal__proceed" onClick={proceed}>결제하기</button>
+            <button className="paymentmodal__cancel" onClick={cancel}>취소하기</button>
+          </div>
         </div>
-        <div className="paymentmodal__btnBox">
-          <button className="paymentmodal__proceed" onClick={proceed}>결제하기</button>
-          <button className="paymentmodal__cancel" onClick={cancel}>취소하기</button>
-        </div>
-      </div>
-    </PotalModal>
+      </PotalModal>
+    </div>
   )
 }
 
