@@ -5,5 +5,11 @@
   "repository": "https://github.com/YooSeok2/react-type-shoppingmall.git",
   "author": "yooseok <yooseok@kalecode.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "workspaces": [
+    "client"
+  ],
+  "scripts": {
+    "client": "yarn workspace client dev"
+  }
 }
