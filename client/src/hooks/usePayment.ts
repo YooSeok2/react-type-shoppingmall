@@ -30,7 +30,7 @@ export const usePayment = () : ReturnType => {
   }
 
   const cancelPayment = () => {
-    setModalShown(false);
+    setModalShown(false);``
   }
   return {
     modalShown,

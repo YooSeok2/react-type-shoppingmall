@@ -78,6 +78,10 @@ export default function Cart(){
     });
   }
 
+  const handleWillPayButtonClick = () => {
+    router.push('/payment');
+  }
+
   return (
     <AppLayout title='장바구니 페이지'>
       <form ref={formRef} onChange={handleCheckBoxChanged}>
@@ -100,7 +104,7 @@ export default function Cart(){
         </ul>
       </form>
       <WillPay>
-        <WillPay.Button onClick={()=>router.push('/payment')}/>
+        <WillPay.Button onClick={handleWillPayButtonClick}/>
       </WillPay>
     </AppLayout>
   )
