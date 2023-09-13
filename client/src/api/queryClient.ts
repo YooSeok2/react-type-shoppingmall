@@ -25,7 +25,7 @@ export const getClient = () => {
 };
 
 const AXIOS_BASE_URL = 'https://fakestoreapi.com';
-const GRAPHQL_BASE_URL = '/';
+const GRAPHQL_BASE_URL = 'http://localhost:8000/graphql';
 export const restFetcher = async ({
   method,
   path,
@@ -53,7 +53,6 @@ export const restFetcher = async ({
     console.error(err);
   }
 }
-
 export const graphqlFetcher = (query: RequestDocument, variables?: {}) => request(GRAPHQL_BASE_URL, query, variables);
 
 export const QueryKeys = {

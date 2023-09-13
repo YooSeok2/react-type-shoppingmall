@@ -9,9 +9,12 @@ import {worker} from '@/mocks/browser';
 import { RecoilRoot } from 'recoil';
 
 const client = getClient();
+/*
 if(process.env.NODE_ENV === 'development') {
   worker.listen();
 }
+ */
+
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
