@@ -1,13 +1,21 @@
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import schema from './schema';
 import resolvers from './resolvers';
-//import cors from 'cors';
+import http from 'http';
+import cors from 'cors';
+import pkg from 'body-parser';
+const { json } = pkg;
 
 (async () => {
+  const app = express();
+  const httpServer = http.createServer(app);
   const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   /**
     {
@@ -19,17 +27,20 @@ import resolvers from './resolvers';
     }
    */
 
-  const app = express();
+
   await server.start();
-  server.applyMiddleware({
-    app:app,
-    path: '/graphql',
-    cors: {
-      origin: ['http://localhost:3000/', 'https://studio.apollographql.com/'],
-      credentials: true
-    }
-  })
-  await app.listen({port: 8000});
+  app.use(
+    '/graphql',
+    cors<cors.CorsRequest>({
+      origin: ['http://localhost:3000', 'https://studio.apollographql.com/sandbox/explorer'],
+      credentials: true,
+    }),
+    json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+    }),
+  )
+  await new Promise<void>((resolve) => httpServer.listen({ port: 8000 }, resolve));
   console.log("Server is running on localhost:8000");
 })();
 
