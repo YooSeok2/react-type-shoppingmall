@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Resolver } from './types';
+import { mock_products } from './product';
 type CartType = {
   id: string;
   amount: number;
@@ -12,14 +13,6 @@ type CartType = {
     createdAt?: number;
   }
 }
-const mock_products = Array.from({length: 20}).map((_,i) => ({
-  id: uuidv4(),
-  imageUrl: `https://i.pravatar.cc/150?img=${10+i}`,
-  price: 50000,
-  title: `임시상품${i+1}`,
-  description: `임시상품${i+1}입니다.`,
-  createdAt: new Date(1645735501883+(i*1000*60*60*10)).toISOString(),
-}))
 
 let cartData: {[key:string]:CartType} = {};
 

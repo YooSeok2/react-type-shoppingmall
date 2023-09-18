@@ -17,13 +17,14 @@ export default function ProductDetail() {
             qkey = {[QueryKeys.PRODUCTS, id as string]}
             graphqlQuery={GET_PRODUCT}
             graphqlId={id as string}
-            callback = {(product: ProductType) => {
+            callback = {(product: {product: ProductType}) => {
+              const newProduct = product.product;
               return (
-                <ProductItem {...product} key={product.id}> 
+                <ProductItem {...newProduct} key={newProduct.id}> 
                   <CustomImage 
                     fill={true} 
-                    src={product.imageUrl} 
-                    alt={product.title} 
+                    src={newProduct.imageUrl} 
+                    alt={newProduct.title} 
                     propHeight={'600px'} 
                     loading='eager'
                   />

@@ -8,17 +8,17 @@ import { useRecoilState } from "recoil";
 import { checkedCartState } from '@/recoils/cart';
 import { commas } from "@/util";
 
-export function CartList({ carts }: { carts: CartType[] }) {
-    return carts.map((cart: CartType) => ( 
-    <CartList.Item {...cart} key={cart.id}>
-      <CustomImage
-        width={200}
-        height={200}
-        src={cart.product.imageUrl} 
-        alt={cart.product.title} 
-        propHeight={'200px'}
-      />
-    </CartList.Item>))
+export function CartList({ carts }: { carts: CartType[] | []}) {
+  return carts.map((cart: CartType) => ( 
+  <CartList.Item {...cart} key={cart.id}>
+    <CustomImage
+      width={200}
+      height={200}
+      src={cart.product.imageUrl} 
+      alt={cart.product.title} 
+      propHeight={'200px'}
+    />
+  </CartList.Item>))
 }
 
 const CartItemBox = styled.li`
@@ -53,28 +53,18 @@ CartList.Item = function Item({
   const queryClient = useQueryClient();
   const [checkedCart, setCheckedCart] = useRecoilState(checkedCartState);
 
-  const {mutate: updateCart} = useMutation(({id, amount} : {id:string, amount:number}) => graphqlFetcher(UPDATE_CART, {id, amount}), 
+  const {mutate: updateCart} = useMutation(({id, amount} : {id:string, amount:number}) => graphqlFetcher(UPDATE_CART, {id:id, amount:amount}), 
   {
     onMutate: async ({id, amount}) => {
       await queryClient.cancelQueries([QueryKeys.CART]);
-      const prevCartData = queryClient.getQueryData<{[key:string]:CartType}>([QueryKeys.CART]);
-      if(!prevCartData?.[id]) return;
-      const newCartData = {
-        ...(prevCartData || {}),
-        [id]: {
-          ...prevCartData?.[id],
-          amount
-        }
-      }
-      queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
+      const prevCartData = queryClient.getQueryData<{carts:CartType[]}>([QueryKeys.CART]).carts;
+      if(!prevCartData.find((item:CartType)=> item.id === id)) return;
+      const newCartData = prevCartData.map((item:CartType) => {
+        if(item.id === id) return {...item, amount}
+        return item;
+      })
+      queryClient.setQueryData([QueryKeys.CART], {carts:newCartData});
       return amount
-    },
-    onSuccess: (newValue:{[key:string]:CartType}, context) => {
-      const newCartData = {
-        ...newValue
-      }
-      queryClient.setQueryData([QueryKeys.CART], [...Object.values(newCartData)]);
-      changeCheckedCartQueryItem(context.amount);
     }
   })
 
@@ -88,6 +78,7 @@ CartList.Item = function Item({
     e.preventDefault();
     const newCartItems = checkedCart.filter((cartItem:CartType) => cartItem.id !== id);
     setCheckedCart(newCartItems);
+    console.log(id)
     deleteCart({ id });
   }
 
@@ -95,14 +86,6 @@ CartList.Item = function Item({
     const changeAmount = Number((e.target as HTMLInputElement).value);
     if(changeAmount < 1) return;
     updateCart({id, amount: changeAmount});
-  }
-
-  const changeCheckedCartQueryItem = (chageAmount: number) => {
-    const newCartItems = checkedCart.map((cartItem:CartType) => {
-      if(cartItem.id === id) return {...cartItem, amount: chageAmount}
-      return cartItem;
-    });
-    setCheckedCart(newCartItems);
   }
   
   return(

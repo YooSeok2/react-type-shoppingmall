@@ -9,22 +9,24 @@ export type CartType = {
 
 export const GET_CARTS = gql`
   query GetCarts {
-    id
-    amount
-    product {
+    carts {
       id
-      imageUrl
-      price
-      title
-      description
-      createdAt
+      amount
+      product {
+        id
+        imageUrl
+        price
+        title
+        description
+        createdAt
+      }
     }
   }
 `
 
 export const ADD_CART = gql`
 mutation ADD_CART($id: ID!) {
-  addCart(productId: $id) {
+  addCart(id: $id) {
     id
     amount
     product {
@@ -40,8 +42,8 @@ mutation ADD_CART($id: ID!) {
 `
 
 export const UPDATE_CART = gql`
-mutation UPDATE_CART($id: ID!, $amount: Int!) {
-  updateCart(cartId: $id, amount: $amount) {
+mutation UPDATE_CART($id: ID, $amount: Int!) {
+  updateCart(id: $id, amount: $amount) {
     id
     amount
     product {
@@ -58,7 +60,7 @@ mutation UPDATE_CART($id: ID!, $amount: Int!) {
 
 export const DELETE_CART = gql`
   mutation DELETE_CART($id: ID!) {
-    id
+    deleteCart(id: $id)
   }
 `
 

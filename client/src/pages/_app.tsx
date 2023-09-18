@@ -5,7 +5,6 @@ import {
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {getClient} from '@/api/queryClient';
-import {worker} from '@/mocks/browser';
 import { RecoilRoot } from 'recoil';
 
 const client = getClient();

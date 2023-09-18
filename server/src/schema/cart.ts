@@ -7,11 +7,11 @@ const cartSchema = gql`
     price: Int!
     title: String!
     description: String
-    createdAt: Float 
+    createdAt: String 
   }
 
   type CartItem {
-    id: ID!
+    id: ID
     amount: Int!
     product: Product!
   }
@@ -22,7 +22,7 @@ const cartSchema = gql`
   
   type Mutation {
     addCart(id: ID!): CartItem!
-    updateCart(id: ID!, amount: Int!): CartItem!
+    updateCart(id: ID, amount: Int!): CartItem!
     deleteCart(id: ID!): ID!
     executePayment(ids:[ID!]): [ID!]
   }

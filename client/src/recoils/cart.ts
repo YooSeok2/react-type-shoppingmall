@@ -1,6 +1,6 @@
 import { CartType } from '@/graphql/cart';
 import {
-  atom, selectorFamily
+  atom
 } from 'recoil';
 
 export const checkedCartState = atom<CartType[]>({

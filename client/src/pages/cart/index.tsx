@@ -55,7 +55,7 @@ export default function Cart(){
     checkBoxes.forEach((inputElem:HTMLInputElement) => {
       if(inputElem.checked) checkedIds.push(inputElem.dataset.id);
     })
-    const cartItems = queryClient.getQueryData<CartType[]>([QueryKeys.CART]) || [];
+    const cartItems = queryClient.getQueryData<{carts:CartType[]}>([QueryKeys.CART])?.carts ?? [];
     const checkedCartItems = cartItems.filter((cartItem:CartType) => {
       return checkedIds.some((id:string) => id === cartItem.id)
     })
@@ -98,7 +98,7 @@ export default function Cart(){
               refetchOnMount: true
             }}
             callback={(data:any)=>{
-              return <CartList carts={data} />}
+              return <CartList carts={data.carts} />}
             }
           />
         </ul>

@@ -36,9 +36,7 @@ const { json } = pkg;
       credentials: true,
     }),
     json(),
-    expressMiddleware(server, {
-      context: async ({ req }) => ({ token: req.headers.token }),
-    }),
+    expressMiddleware(server),
   )
   await new Promise<void>((resolve) => httpServer.listen({ port: 8000 }, resolve));
   console.log("Server is running on localhost:8000");
