@@ -78,7 +78,6 @@ CartList.Item = function Item({
     e.preventDefault();
     const newCartItems = checkedCart.filter((cartItem:CartType) => cartItem.id !== id);
     setCheckedCart(newCartItems);
-    console.log(id)
     deleteCart({ id });
   }
 

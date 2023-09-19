@@ -1,73 +1,67 @@
-import { v4 as uuidv4 } from 'uuid';
-import { Resolver } from './types';
-import { mock_products } from './product';
-type CartType = {
-  id: string;
-  amount: number;
-  product: {
-    id: string;
-    imageUrl: string;
-    price: number;
-    title: string;
-    description?: string;
-    createdAt?: number;
-  }
-}
+import { Cart, Resolver } from './types';
+import { DBFIELDS, writeDB } from '../dbcontroller';
 
-let cartData: {[key:string]:CartType} = {};
+
+const setJSON = (data:Cart) => writeDB(DBFIELDS.CART, data);
 
 const cartResolver: Resolver = {
   Query: {
-    carts: (parent, args, contextValue, info)  => {
-      return [...Object.values(cartData)];
+    carts: (parent, args, {db}, info)  => {
+      return db.cart;
    },
   },
   Mutation: {
-    addCart: (parent, args, contextValue, info) => {
-      const newData = JSON.parse(JSON.stringify(cartData));
-      const id = args.id;
-      if(newData[id]) {
-          newData[id] = {
-              ...newData[id],
-              amount: newData[id].amount + 1
-          }
-      } else {
-        const foundItem = mock_products.find((item) => item.id === id);
-        if ( foundItem ){
-          newData[id] = {
-            id: id,
-            amount: 1,
-            product: {...foundItem},
+    addCart: (parent, {id}, {db}, info) => {
+      if(!id) throw new Error('id is required');
+      const foundItem = db.products.find((item)=> item.id === id);
+      if(!foundItem) throw new Error('product not found');
+      const foundCartItemIndex = db.cart.findIndex((item)=> item.id === id);
+      if( foundCartItemIndex === -1) {
+        const newCartItem = {
+          id,
+          amount: 1,
+          product: {
+            ...foundItem
           }
         }
+        db.cart.push(newCartItem);
+        setJSON(db.cart);
+        return newCartItem;
+      } 
+      const cartItem = {
+        ...db.cart[foundCartItemIndex],
+        amount: 1 + db.cart[foundCartItemIndex].amount
       }
-      cartData = newData;
-      return newData[id];
+      db.cart.splice(foundCartItemIndex, 1, cartItem);
+      setJSON(db.cart);
+      return cartItem;
     },
-    updateCart: (parent, args, contextValue, info) => {
-      const newData = JSON.parse(JSON.stringify(cartData));
-      const {id, amount}  = args;
-      if(!newData[id]) throw new Error('cart not found');
-      newData[id] = {
-        ...newData[id],
-        amount: amount
+    updateCart: (parent, {id, amount}, {db}, info) => {
+      const foundCartItemIndex = db.cart.findIndex((item)=> item.id === id);
+      if( foundCartItemIndex === -1) throw new Error('cart not found');
+      const cartItem = {
+        ...db.cart[foundCartItemIndex],
+        amount
       }
-      cartData = newData;
-      return newData
+      db.cart.splice(foundCartItemIndex, 1, cartItem);
+      setJSON(db.cart);
+      return cartItem;
     },
-    deleteCart: (parent, args, contextValue, info) => {
-      const newData = JSON.parse(JSON.stringify(cartData));
-      delete newData[args.id];
-      cartData = newData;
-      return args.id
+    deleteCart: (parent, {id}, {db}, info) => {
+      const foundCartItemIndex = db.cart.findIndex((item)=> item.id === id);
+      if( foundCartItemIndex === -1) throw new Error('cart not found');
+      db.cart.splice(foundCartItemIndex, 1);
+      setJSON(db.cart);
+      return id;
     },
-    executePayment: (parent, args, contextValue, info) => {
-      const newData = JSON.parse(JSON.stringify(cartData));
-      args.ids.forEach((id:any) => {
-        delete newData[id];
+    executePayment: (parent, {ids}, {db}, info) => {
+      ids.forEach((id:string)=>{
+        const foundCartItemIndex = db.cart.findIndex((item)=> item.id === id);
+        if( foundCartItemIndex === -1) throw new Error('cart not found');
+        db.cart.splice(foundCartItemIndex, 1);
       })
-      cartData = newData;
-      return args.ids
+      setJSON(db.cart);
+      return ids;
     },
   }
 }

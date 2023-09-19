@@ -12,11 +12,11 @@ export const mock_products = Array.from({length: 20}).map((_,i) => ({
 
 const productResolver: Resolver = {
   Query: {
-     products: (parent, args, contextValue, info) => {
-        return mock_products
+     products: (parent, args, {db}) => {
+        return db.products
      },
-     product: (parent, args, contextValue, info) => {
-        const foundItem = mock_products.find((item) => item.id === args.id);
+     product: (parent, args, {db}) => {
+        const foundItem = db.products.find((item : any) => item.id === args.id);
         return foundItem;
      }
   },
