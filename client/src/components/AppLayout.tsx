@@ -1,6 +1,6 @@
 import Gnb from "./Gnb";
 
-const AppLayout = ({ title, children }: { title?:string ,children: React.ReactNode }) => {
+const AppLayout = ({ title, children }: { title?:string, children: React.ReactNode }) => {
   return (
     <div  className={`flex min-h-screen flex-col justify-between p-12`}>
       <Gnb />

@@ -16,7 +16,7 @@ export default function ProductDetail() {
             path = {`/products/${id}`}
             qkey = {[QueryKeys.PRODUCTS, id as string]}
             graphqlQuery={GET_PRODUCT}
-            graphqlId={id as string}
+            graphqlArg={{ id: id as string}}
             callback = {(product: {product: ProductType}) => {
               const newProduct = product.product;
               return (

@@ -7,7 +7,7 @@ type QueryLayoutProps = {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   path?: string;
   graphqlQuery?: RequestDocument;
-  graphqlId?: string;
+  graphqlArg?: {[key: string]: any};
   graphqlOption?: any;
   qkey: string[];
   callback: (data: [] | any) => ReactElement;
@@ -17,12 +17,12 @@ export default function QueryLayout({
   method,
   path,
   graphqlQuery,
-  graphqlId,
+  graphqlArg,
   qkey,
   graphqlOption,
   callback 
 }: QueryLayoutProps) {
-  const {data, isLoading, isError} = useQuery([...qkey], () => graphqlFetcher(graphqlQuery, {id:graphqlId}), graphqlOption)
+  const {data, isLoading, isError} = useQuery([...qkey], () => graphqlFetcher(graphqlQuery, graphqlArg), graphqlOption)
   if(isLoading) return <div>Loading...</div>
   if(isError) return <div>Error...</div>
   return callback(data)

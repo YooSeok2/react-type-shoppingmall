@@ -24,13 +24,17 @@ export const usePayment = () : ReturnType => {
 
   const proceedPayment = () => {
     const ids = checkedCartData.map((item) => item.id);
-    executePay(ids);
-    setCheckedCartData([]);
-    router.replace("/products")
+    executePay(ids, {
+      onSuccess: () => {
+        setCheckedCartData([]);
+        alert("성공적으로 결제가 완료되었습니다.")
+        router.replace("/products")
+      }
+    });
   }
 
   const cancelPayment = () => {
-    setModalShown(false);``
+    setModalShown(false);
   }
   return {
     modalShown,

@@ -25,7 +25,8 @@ const cartResolver: Resolver = {
           }
         }
         db.cart.push(newCartItem);
-        setJSON(db.cart);
+        const result = setJSON(db.cart);
+        if(!result) throw new Error('failed to add cart');
         return newCartItem;
       } 
       const cartItem = {
@@ -33,7 +34,8 @@ const cartResolver: Resolver = {
         amount: 1 + db.cart[foundCartItemIndex].amount
       }
       db.cart.splice(foundCartItemIndex, 1, cartItem);
-      setJSON(db.cart);
+      const result = setJSON(db.cart);
+      if(!result) throw new Error('failed to add cart')
       return cartItem;
     },
     updateCart: (parent, {id, amount}, {db}, info) => {
@@ -45,13 +47,16 @@ const cartResolver: Resolver = {
       }
       db.cart.splice(foundCartItemIndex, 1, cartItem);
       setJSON(db.cart);
+      const result = setJSON(db.cart);
+      if(!result) throw new Error('failed to add cart')
       return cartItem;
     },
     deleteCart: (parent, {id}, {db}, info) => {
       const foundCartItemIndex = db.cart.findIndex((item)=> item.id === id);
       if( foundCartItemIndex === -1) throw new Error('cart not found');
       db.cart.splice(foundCartItemIndex, 1);
-      setJSON(db.cart);
+      const result = setJSON(db.cart);
+      if(!result) throw new Error('failed to add cart')
       return id;
     },
     executePayment: (parent, {ids}, {db}, info) => {
@@ -60,7 +65,8 @@ const cartResolver: Resolver = {
         if( foundCartItemIndex === -1) throw new Error('cart not found');
         db.cart.splice(foundCartItemIndex, 1);
       })
-      setJSON(db.cart);
+      const result = setJSON(db.cart);
+      if(!result) throw new Error('failed to add cart');
       return ids;
     },
   }

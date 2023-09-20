@@ -19,7 +19,7 @@ export const readDB = (db: DBFIELDS) => {
     return JSON.parse(data);
   } catch (error) {
     console.error(error);
-    return false;
+    return null;
   }
 }
 

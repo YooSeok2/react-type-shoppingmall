@@ -6,6 +6,7 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {getClient} from '@/api/queryClient';
 import { RecoilRoot } from 'recoil';
+import { v4 as uuidv4 } from 'uuid';
 
 const client = getClient();
 /*
@@ -13,7 +14,6 @@ if(process.env.NODE_ENV === 'development') {
   worker.listen();
 }
  */
-
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -25,3 +25,5 @@ export default function App({ Component, pageProps }: AppProps) {
     </QueryClientProvider>
   )
 }
+
+

@@ -13,6 +13,7 @@ export default function Products() {
             method= 'GET'
             path = '/products'
             qkey = {[QueryKeys.PRODUCTS]}
+            graphqlArg={{cursor:""}}
             graphqlQuery={GET_PRODUCTS}
             callback = {(data: any) => {
               return <ProductList products={data.products} />
