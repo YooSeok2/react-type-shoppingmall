@@ -2,9 +2,9 @@ import {ProductType} from '@/graphql/products'
 import {ProductItem}  from "@/components/product/ProductItem";
 import CustomImage from '@/components/Image'
 
-export function ProductList({products}:{products:ProductType[]}){
+export function ProductList({list}:{list:{products:ProductType[]}[]}) {
   return (
-    products.map((product:ProductType) =>
+    list.map((page) => page.products.map((product) =>
       <ProductItem {...product} key={product.id}> 
         <CustomImage  
           width={200}
@@ -14,7 +14,7 @@ export function ProductList({products}:{products:ProductType[]}){
           propHeight={'200px'}
         />
       </ProductItem>
-    )
+    ))
   )
   
 }
