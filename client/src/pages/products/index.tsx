@@ -5,29 +5,23 @@ import { GET_PRODUCTS } from '@/graphql/products';
 import { ProductList } from '@/components/product/ProductList';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRefCurrent } from '@/hooks';
+import useIntersection from '@/hooks/useIntersection';
 
 export default function Products() {
-  const observerRef = useRef<IntersectionObserver>();
-  const [fetchMoreRef, fetchMoreRefCurrent] = useRefCurrent<HTMLDivElement>();
-  const { data, hasNextPage, fetchNextPage, isLoading, isError } = useInfiniteQuery<any>(
+  const fetchMoreRef = useRef<HTMLDivElement>();
+  const interSecting = useIntersection(fetchMoreRef);
+  const { data, hasNextPage, fetchNextPage, isSuccess, isFetchingNextPage } = useInfiniteQuery<any>(
     [QueryKeys.PRODUCTS], 
     ({pageParam = ""}) => graphqlFetcher(GET_PRODUCTS, {cursor: pageParam}), {
     getNextPageParam: (lastPage, allPage) => {
       return lastPage.products[lastPage.products.length - 1].id
     }
   })
-  const getObserver = useCallback(()=>{
-    if(!observerRef.current) {
-      observerRef.current = new IntersectionObserver(([entry]) => {
-        if(entry.isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      })
-    }
-  },[observerRef.current]);
-  useEffect(()=>{
-    // if(fetchMoreRefCurrent) getObserver().observe(fetchMoreRefCurrent);
-  },[getObserver, fetchMoreRefCurrent]);
+  
+  // useEffect(()=>{
+  //   if(!interSecting || !hasNextPage || !isSuccess || isFetchingNextPage) return;
+  //   fetchNextPage();
+  // },[interSecting]);
   return (
     <AppLayout title='상품페이지'>
       <div className="products">
