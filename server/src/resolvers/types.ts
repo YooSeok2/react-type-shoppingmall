@@ -21,7 +21,7 @@ export type Product = {
   price: number;
   title: string;
   description: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export type Products = Product[];
