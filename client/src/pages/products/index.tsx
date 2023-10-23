@@ -8,20 +8,22 @@ import { useRefCurrent } from '@/hooks';
 import useIntersection from '@/hooks/useIntersection';
 
 export default function Products() {
-  const fetchMoreRef = useRef<HTMLDivElement>();
+  const fetchMoreRef = useRef<HTMLDivElement>(null);
   const interSecting = useIntersection(fetchMoreRef);
   const { data, hasNextPage, fetchNextPage, isSuccess, isFetchingNextPage } = useInfiniteQuery<any>(
     [QueryKeys.PRODUCTS], 
     ({pageParam = ""}) => graphqlFetcher(GET_PRODUCTS, {cursor: pageParam}), {
     getNextPageParam: (lastPage, allPage) => {
-      return lastPage.products[lastPage.products.length - 1].id
+      const lastId = lastPage.products[lastPage.products.length - 1]?.id;
+      return lastId
     }
   })
   
-  // useEffect(()=>{
-  //   if(!interSecting || !hasNextPage || !isSuccess || isFetchingNextPage) return;
-  //   fetchNextPage();
-  // },[interSecting]);
+  useEffect(()=>{
+    console.log(interSecting)
+    if(!interSecting || !hasNextPage || !isSuccess || isFetchingNextPage) return () => {console.log('return')};
+    fetchNextPage();
+  },[interSecting]);
   return (
     <AppLayout title='상품페이지'>
       <div className="products">

@@ -16,7 +16,6 @@ const useIntersection = (targetRef: RefObject<HTMLDivElement>) => {
   useEffect(()=>{
     getObserver().observe(targetRef.current);
   },[]);
-  console.log(isIntersect);
   return isIntersect;
 }
 
